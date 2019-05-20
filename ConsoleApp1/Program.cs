@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleApp1
+namespace shuntingYard
 {
     internal class Operator
     {
@@ -88,13 +88,13 @@ namespace ConsoleApp1
     }
 
 
-    class Program
+    public class Program
     {
        
-        public static Queue<Object> shuntingYard()
+        public Queue<string> shuntingYardAlgorithm(List<char> var)
         {
-            string var = Console.ReadLine();
-            Queue<Object> Ouput = new Queue<Object>();
+            
+            Queue<string> Ouput = new Queue<string>();
             Stack<Operator> Operators = new Stack<Operator>();
             foreach (char x in var)
             {
@@ -103,7 +103,7 @@ namespace ConsoleApp1
 
                 if (int.TryParse(x.ToString(), out number))
                 {
-                    Ouput.Enqueue(number);
+                    Ouput.Enqueue(number.ToString());
                 }
                 else
                 {
@@ -115,13 +115,13 @@ namespace ConsoleApp1
                             while ((Operators.Peek() > token) && Operators.Peek().getName() != "(" || (Operators.Peek() == token) && Operators.Peek().getAssociativity() == 1)
                             {
                                 Operator current = Operators.Pop();
-                                Ouput.Enqueue(current);
+                                Ouput.Enqueue(current.ToString());
                             }
                         }
                         Operators.Push(token);
 
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                         
                         if (x == ')')
@@ -129,7 +129,7 @@ namespace ConsoleApp1
                             while (Operators.Count != 0 && Operators.Peek().getName() != "(")
                             {
                                 Operator current = Operators.Pop();
-                                Ouput.Enqueue(current);
+                                Ouput.Enqueue(current.ToString());
                             }
                             if (Operators.Count != 0 && Operators.Peek().getName() != "(")
                             {
@@ -148,7 +148,7 @@ namespace ConsoleApp1
                 Operator @operator = Operators.Pop();
                 if (@operator.getName() != "(")
                 {
-                    Ouput.Enqueue(@operator);
+                    Ouput.Enqueue(@operator.ToString());
                 }
 
             }
@@ -163,11 +163,15 @@ namespace ConsoleApp1
 
         static void Main(string[] args)
         {
-            Queue<Object> output = shuntingYard();
-            foreach(Object x in output)
+            List<char> var = new List<char>{'1','+','2'};
+            Program alg = new Program();
+            Queue<string> output = alg.shuntingYardAlgorithm(var);
+            List<string> result = new List<string> { "1", "2", "+" };
+            foreach(string x in output)
             {
                 Console.Write(x);
             }
+            
             Console.ReadKey();
         }
     }
