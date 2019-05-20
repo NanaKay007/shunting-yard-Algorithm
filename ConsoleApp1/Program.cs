@@ -91,7 +91,7 @@ namespace ConsoleApp1
     class Program
     {
        
-        static void Main(string[] args)
+        public static Queue<Object> shuntingYard()
         {
             string var = Console.ReadLine();
             Queue<Object> Ouput = new Queue<Object>();
@@ -99,9 +99,9 @@ namespace ConsoleApp1
             foreach (char x in var)
             {
                 int number;
-                
 
-                if (int.TryParse(x.ToString(),out number))
+
+                if (int.TryParse(x.ToString(), out number))
                 {
                     Ouput.Enqueue(number);
                 }
@@ -112,58 +112,63 @@ namespace ConsoleApp1
                         Operator token = new Operator(x);
                         if (Operators.Count != 0)
                         {
-                            while ((Operators.Peek() > token) && Operators.Peek().getName() != "(" || (Operators.Peek() == token) && Operators.Peek().getAssociativity()==1)
+                            while ((Operators.Peek() > token) && Operators.Peek().getName() != "(" || (Operators.Peek() == token) && Operators.Peek().getAssociativity() == 1)
                             {
                                 Operator current = Operators.Pop();
                                 Ouput.Enqueue(current);
                             }
                         }
                         Operators.Push(token);
-                       
+
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine(e.Message); 
-                        if(x == ')')
+                        
+                        if (x == ')')
                         {
-                            while (Operators.Count != 0 && Operators.Peek().getName()!= "(")
+                            while (Operators.Count != 0 && Operators.Peek().getName() != "(")
                             {
                                 Operator current = Operators.Pop();
                                 Ouput.Enqueue(current);
                             }
-                            if(Operators.Count != 0 && Operators.Peek().getName() != "(")
+                            if (Operators.Count != 0 && Operators.Peek().getName() != "(")
                             {
                                 Operators.Pop();
                             }
                         }
                     }
-                    
-                    
+
+
                 }
-                
+
             }
 
             while (Operators.Count != 0)
             {
                 Operator @operator = Operators.Pop();
-                if(@operator.getName() != "(")
+                if (@operator.getName() != "(")
                 {
                     Ouput.Enqueue(@operator);
                 }
-                
+
             }
 
 
-            //print operands in Operand Stack
-            foreach (Object x in Ouput)
-            {        
-                    Console.Write(x.ToString());
-            }
-            
+          
+            return Ouput;
 
-            //print operators in Operator Stack
+
+        }
+
+
+        static void Main(string[] args)
+        {
+            Queue<Object> output = shuntingYard();
+            foreach(Object x in output)
+            {
+                Console.Write(x);
+            }
             Console.ReadKey();
-
         }
     }
 
