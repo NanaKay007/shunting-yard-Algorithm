@@ -24,24 +24,34 @@ namespace Tests
             
             return input;
         }
+        //tests only tokenize
 
+
+        //tests both shunting-yard algorithm and tokenize
         [Test]
-        public void Test1()
+        public void TestSimpleConvert()
         {
             string expression = "1+2";
-            Setup();
             List<char> input = CreateInput(expression);
             Queue<string> ouput = alg.shuntingYardAlgorithm(input);
             List<string> expected = new List<string>() { "1","2","+"};
 
             Assert.AreEqual(expected, ouput);
-            Assert.Pass();
+           
         }
 
         [Test]
-        public void Test2()
+        public void TestFloatInput()
         {
 
+            string expression = "1.342+4.5";
+            List<char> input = CreateInput(expression);
+            Queue<string> output = alg.shuntingYardAlgorithm(input);
+            List<string> expected = new List<string>() { "1.342","4.5","+" };
+            Assert.AreEqual(expected, output);
+      
         }
+
+
     }
 }

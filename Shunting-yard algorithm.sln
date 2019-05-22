@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28307.645
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "shunting-yard", "ConsoleApp1\shunting-yard.csproj", "{85354D8F-4BC1-40EA-8CC6-3EA13B4B834C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnitTestProject1", "NUnitTestProject1\NUnitTestProject1.csproj", "{77758359-500E-4862-AD89-2303B372A85E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestAlgorithm", "NUnitTestProject1\TestAlgorithm.csproj", "{77758359-500E-4862-AD89-2303B372A85E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

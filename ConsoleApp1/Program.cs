@@ -160,6 +160,15 @@ namespace shuntingYard
 
         }
 
+        public List<char> tokenize(string expression)
+        {
+            //purpose: separates an expression into tokens; numbers and operators
+            //params: a string expression
+            //return: a list of tokens; throws an error if an invalid token is encountered in the expression
+            List<char> tokens = new List<char>();
+
+            return tokens;
+        }
 
         static void Main(string[] args)
         {
