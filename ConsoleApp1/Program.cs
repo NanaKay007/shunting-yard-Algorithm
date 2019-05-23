@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace shuntingYard
 {
-    internal class Operator
+    public class Operator
     {
         private int precedence, associativity;
         private string name;
@@ -48,10 +49,7 @@ namespace shuntingYard
             }
         }
 
-        public string getName()
-        {
-            return name;
-        }
+        public string getName() => name;
 
         public int getPrecedence()
         {
@@ -90,8 +88,8 @@ namespace shuntingYard
 
     public class Program
     {
-       
-        public Queue<string> shuntingYardAlgorithm(List<char> var)
+
+        public Queue<string> ShuntingYardAlgorithm(List<char> var)
         {
             
             Queue<string> Ouput = new Queue<string>();
@@ -166,21 +164,24 @@ namespace shuntingYard
             //params: a string expression
             //return: a list of tokens; throws an error if an invalid token is encountered in the expression
             List<char> tokens = new List<char>();
+            string pattern = "(([+*/-])?(\\d+[\\.]?\\d+)?([+*/-])(\\d+))";
+            Match regex = Regex.Match(expression,pattern);
+            if (regex.Success)
+            {
+                Console.WriteLine(regex);
+                Console.WriteLine(regex.GetType());
+            }
+
 
             return tokens;
         }
 
         static void Main(string[] args)
         {
-            List<char> var = new List<char>{'1','+','2'};
+            string var = @"1+3*3";
             Program alg = new Program();
-            Queue<string> output = alg.shuntingYardAlgorithm(var);
-            List<string> result = new List<string> { "1", "2", "+" };
-            foreach(string x in output)
-            {
-                Console.Write(x);
-            }
-            
+            List<char> output = alg.tokenize(var);
+
             Console.ReadKey();
         }
     }
