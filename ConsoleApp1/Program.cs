@@ -164,12 +164,18 @@ namespace shuntingYard
             //params: a string expression
             //return: a list of tokens; throws an error if an invalid token is encountered in the expression
             List<char> tokens = new List<char>();
-            string pattern = "(([+*/-])?(\\d+[\\.]?\\d+)?([+*/-])(\\d+))";
-            Match regex = Regex.Match(expression,pattern);
-            if (regex.Success)
+
+            Regex rx = new Regex(@"(([+*/-])?(\d+[\.(\d)+]?)?([+*/-])(\d+))");
+
+            MatchCollection matches = rx.Matches(expression);
+
+            foreach (Match match in matches)
             {
-                Console.WriteLine(regex);
-                Console.WriteLine(regex.GetType());
+                GroupCollection groups = match.Groups;
+                Console.WriteLine("'{0}' repeated at positions {1} and {2}",
+                                  groups["word"].Value,
+                                  groups[0].Index,
+                                  groups[1].Index);
             }
 
 
