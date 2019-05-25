@@ -49,33 +49,33 @@ namespace shuntingYard
             }
         }
 
-        public string getName() => name;
+        public string GetName() => name;
 
-        public int getPrecedence()
+        public int GetPrecedence()
         {
             return precedence;
         }
 
         public static bool operator >(Operator self,Operator other)
         {
-            return self.getPrecedence() > other.getPrecedence();
+            return self.GetPrecedence() > other.GetPrecedence();
         }
 
         public static bool operator < (Operator self, Operator other)
         {
-            return self.precedence < other.getPrecedence();
+            return self.precedence < other.GetPrecedence();
         }
 
         public static bool operator ==(Operator self, Operator other)
         {
-            return self.precedence == other.getPrecedence();
+            return self.precedence == other.GetPrecedence();
         }
 
         public static bool operator !=(Operator self, Operator other)
         {
-            return self.precedence == other.getPrecedence();
+            return self.precedence == other.GetPrecedence();
         }
-        public int getAssociativity()
+        public int GetAssociativity()
         {
             return associativity;
         }
@@ -84,31 +84,30 @@ namespace shuntingYard
             return name;
         }
 
-        public override bool Equals(Operator obj)
-        {
-            if (obj == null)
-                return false;
-            if (this.GetType() != obj.GetType())
-                return false;
-            return true;
-        }
+        //public override bool Equals(Operator obj)
+        //{
+        //    if (obj == null)
+        //        return false;
+        //    if (this.GetType() != obj.GetType())
+        //        return false;
+        //    return true;
+        //}
     }
 
 
     public class Program
     {
 
-        public Queue<string> ShuntingYardAlgorithm(List<char> var)
+        public Queue<string> ShuntingYardAlgorithm(string var)
         {
             
             Queue<string> Ouput = new Queue<string>();
             Stack<Operator> Operators = new Stack<Operator>();
             foreach (char x in var)
             {
-                int number;
 
 
-                if (int.TryParse(x.ToString(), out number))
+                if (int.TryParse(x.ToString(), out int number))
                 {
                     Ouput.Enqueue(number.ToString());
                 }
@@ -119,7 +118,7 @@ namespace shuntingYard
                         Operator token = new Operator(x);
                         if (Operators.Count != 0)
                         {
-                            while ((Operators.Peek() > token) && Operators.Peek().getName() != "(" || (Operators.Peek() == token) && Operators.Peek().getAssociativity() == 1)
+                            while ((Operators.Peek() > token) && Operators.Peek().GetName() != "(" || (Operators.Peek() == token) && Operators.Peek().GetAssociativity() == 1)
                             {
                                 Operator current = Operators.Pop();
                                 Ouput.Enqueue(current.ToString());
@@ -130,15 +129,15 @@ namespace shuntingYard
                     }
                     catch (Exception)
                     {
-                        
+
                         if (x == ')')
                         {
-                            while (Operators.Count != 0 && Operators.Peek().getName() != "(")
+                            while (Operators.Count != 0 && Operators.Peek().GetName() != "(")
                             {
                                 Operator current = Operators.Pop();
                                 Ouput.Enqueue(current.ToString());
                             }
-                            if (Operators.Count != 0 && Operators.Peek().getName() != "(")
+                            if (Operators.Count != 0 && Operators.Peek().GetName() != "(")
                             {
                                 Operators.Pop();
                             }
@@ -153,7 +152,7 @@ namespace shuntingYard
             while (Operators.Count != 0)
             {
                 Operator @operator = Operators.Pop();
-                if (@operator.getName() != "(")
+                if (@operator.GetName() != "(")
                 {
                     Ouput.Enqueue(@operator.ToString());
                 }
@@ -167,12 +166,12 @@ namespace shuntingYard
 
         }
 
-        public List<char> Tokenize(string expression)
+        public List<string> Tokenize(string expression)
         {
             //purpose: separates an expression into tokens; numbers and operators
             //params: a string expression
             //return: a list of tokens; throws an error if an invalid token is encountered in the expression
-            List<char> tokens = new List<char>();
+            List<string> tokens = new List<string>();
 
             Regex numberRegex = new Regex(@"\d+(\.)?\d*");
             Regex operatorRegex = new Regex(@"[+-/*]");
@@ -206,11 +205,7 @@ namespace shuntingYard
 
         static void Main(string[] args)
         {
-            string var = @"1+3*3";
-            Program alg = new Program();
-            List<char> output = alg.Tokenize(var);
 
-            Console.ReadKey();
         }
     }
 
