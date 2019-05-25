@@ -166,15 +166,20 @@ namespace shuntingYard
 
         }
 
+        private static List<T> CreateList<T>(int capacity)
+        {
+            return Enumerable.Repeat(default(T), capacity).ToList();
+        }
+
         public List<string> Tokenize(string expression)
         {
             //purpose: separates an expression into tokens; numbers and operators
             //params: a string expression
             //return: a list of tokens; throws an error if an invalid token is encountered in the expression
-            List<string> tokens = new List<string>();
 
-            Regex numberRegex = new Regex(@"\d+(\.)?\d*");
-            Regex operatorRegex = new Regex(@"[+-/*]");
+
+            Regex numberRegex = new Regex(@"\d+\.?\d*");
+            Regex operatorRegex = new Regex(@"[\+\-\/\*]");
             Regex invalidRegex = new Regex("[^\\d+*/-]");
 
 
@@ -182,30 +187,158 @@ namespace shuntingYard
             MatchCollection operatorMatches = operatorRegex.Matches(expression);
             MatchCollection invalidMatches = invalidRegex.Matches(expression);
 
+            int size = numberMatches.Count + operatorMatches.Count;
 
+            List<string> tokens = new List<string>();
 
-            foreach (Match match in numberMatches)
+            Queue<Match> numbers = new Queue<Match>();
+            Queue<Match> operators = new Queue<Match>();
+
+            foreach(Match number in numberMatches)
             {
-                foreach (Group group in match.Groups)
-                {
-                    Console.WriteLine(group);
-                }
+                numbers.Enqueue(number);
             }
 
-            foreach( Match match in operatorMatches)
+            foreach(Match oper in operatorMatches)
             {
-                foreach(Group group in match.Groups)
-                {
-                    Console.WriteLine(group);
-                }
+                operators.Enqueue(oper);
             }
+
+            for(int i = 0; i < size; i++)
+            {
+                Match number;
+                Match oper;
+
+                _ = numbers.Count != 0 ? number = numbers.Peek() : number = null;
+                _ = operators.Count != 0 ? oper = operators.Peek() : oper = null;
+
+
+                    if (numbers.Count!= 0)
+                    {
+                    if(oper != null && number != null)
+                        if (number.Index < oper.Index)
+                        {
+                            tokens.Add(number.ToString());
+                            numbers.Dequeue();
+                        }
+                        
+                    }
+                    if(operators.Count != 0)
+                    {
+                    if (oper != null && number != null)
+                        if (number.Index > oper.Index)
+                        {
+                            tokens.Add(oper.ToString());
+                            operators.Dequeue();
+                        }
+                        
+                    }
+                    if(oper == null && number != null)
+                {
+                    tokens.Add(number.ToString());
+                    numbers.Dequeue();
+                }
+                    else if (oper != null && number == null)
+                {
+                    tokens.Add(oper.ToString());
+                    operators.Dequeue();
+                }
+              
+                //else
+                //{
+                //    var current_operator = oper;
+                //    while(current_operator.NextMatch() != null)
+                //    {
+                //        current_operator = current_operator.NextMatch();
+                //        if(Math.Abs(current_operator.Index - number.Index) == 1)
+                //        {
+                //            tokens.Add(current_operator.ToString());
+
+                //        }
+                //    }
+                //}
+            }
+
+            //int j = 0;
+
+            //for (int i = 0; i < size; i++)
+            //{
+            //Match numberMatch;
+            //Match operatorMatch;
+            
+
+            //_ = i < numberMatches.Count? numberMatch = numberMatches[i]: numberMatch = null;
+
+            //_ = i < operatorMatches.Count? operatorMatch = operatorMatches[i]: operatorMatch=null;
+
+            //if(numberMatch != null && operatorMatch != null)
+            //{
+
+
+            //        if (numberMatch.Index < operatorMatch.Index)
+            //        {
+
+            //                tokens[j] = numberMatch.ToString();
+            //                tokens[j + 1] = operatorMatch.ToString();
+
+
+            //        }
+            //        else
+            //        {
+
+
+
+
+            //            if(operatorMatch.Index < operatorMatch.NextMatch().Index)
+            //            {
+            //                tokens[j] = operatorMatch.ToString();
+            //            }
+            //            else
+            //            {
+            //                tokens[j] = operatorMatch.NextMatch().ToString();
+            //            }
+            //            tokens[j + 1] = numberMatch.ToString();
+            //        }
+            //        j += 2;
+
+            //    } 
+            //else if (numberMatch != null && operatorMatch==null)
+            //{
+            //    tokens[j] = numberMatch.ToString();
+            //        j++;
+            //}
+
+            //if(j == size)
+            //    {
+            //        return tokens;
+            //    }
+            //}
+            
+
+
+
+
+            //foreach( Match match in operatorMatches)
+            //{
+            //    foreach(Group group in match.Groups)
+            //    {
+            //        Console.WriteLine(group);
+            //    }
+            //}
 
             return tokens;
         }
 
         static void Main(string[] args)
         {
-
+           
+            Program program = new Program();
+            string expression = "+12+-553";
+            List<string> result = program.Tokenize(expression);
+            foreach (string x in result)
+            {
+                Console.WriteLine(x);
+            }
         }
     }
 
