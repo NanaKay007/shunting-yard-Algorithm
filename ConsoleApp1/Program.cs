@@ -83,6 +83,15 @@ namespace shuntingYard
         {
             return name;
         }
+
+        public override bool Equals(Operator obj)
+        {
+            if (obj == null)
+                return false;
+            if (this.GetType() != obj.GetType())
+                return false;
+            return true;
+        }
     }
 
 
@@ -158,26 +167,39 @@ namespace shuntingYard
 
         }
 
-        public List<char> tokenize(string expression)
+        public List<char> Tokenize(string expression)
         {
             //purpose: separates an expression into tokens; numbers and operators
             //params: a string expression
             //return: a list of tokens; throws an error if an invalid token is encountered in the expression
             List<char> tokens = new List<char>();
 
-            Regex rx = new Regex(@"(([+*/-])?(\d+[\.(\d)+]?)?([+*/-])(\d+))");
+            Regex numberRegex = new Regex(@"\d+(\.)?\d*");
+            Regex operatorRegex = new Regex(@"[+-/*]");
+            Regex invalidRegex = new Regex("[^\\d+*/-]");
 
-            MatchCollection matches = rx.Matches(expression);
 
-            foreach (Match match in matches)
+            MatchCollection numberMatches = numberRegex.Matches(expression);
+            MatchCollection operatorMatches = operatorRegex.Matches(expression);
+            MatchCollection invalidMatches = invalidRegex.Matches(expression);
+
+
+
+            foreach (Match match in numberMatches)
             {
-                GroupCollection groups = match.Groups;
-                Console.WriteLine("'{0}' repeated at positions {1} and {2}",
-                                  groups["word"].Value,
-                                  groups[0].Index,
-                                  groups[1].Index);
+                foreach (Group group in match.Groups)
+                {
+                    Console.WriteLine(group);
+                }
             }
 
+            foreach( Match match in operatorMatches)
+            {
+                foreach(Group group in match.Groups)
+                {
+                    Console.WriteLine(group);
+                }
+            }
 
             return tokens;
         }
@@ -186,7 +208,7 @@ namespace shuntingYard
         {
             string var = @"1+3*3";
             Program alg = new Program();
-            List<char> output = alg.tokenize(var);
+            List<char> output = alg.Tokenize(var);
 
             Console.ReadKey();
         }
