@@ -13,6 +13,17 @@ namespace Tests
         {
             alg = new Program();
         }
+
+        public Queue<string> CreateExpectedOuput(string ouput)
+        {
+            Queue<string> expected = new Queue<string>() { };
+            string[] tokens = ouput.Split(' ');
+            foreach(string token in tokens)
+            {
+                expected.Enqueue(token);
+            }
+            return expected;
+        }
         //tests only tokenize
     
             //Ints
@@ -144,26 +155,42 @@ namespace Tests
 
         
         //tests both shunting-yard algorithm and tokenize
-        //[Test]
-        //public void TestSimpleConvert()
-        //{
-        //    string expression = "1+2";
-        //    Queue<string> result = alg.ShuntingYardAlgorithm(expression);
-        //    //Queue<string> expected = new Queue<string>() { "1", "2", "+" };
-           
+        [Test]
+        public void TestSimpleConvertIntInput()
+        {
+            string expression = "1+2";
+            string output = "1 2 +";
 
-        //}
+            Queue<string> actual = alg.ShuntingYardAlgorithm(expression);
+            Queue<string> expected = CreateExpectedOuput(output);
+            Assert.AreEqual(expected, actual);
 
-        //[Test]
-        //public void TestFloatInput()
-        //{
+        }
 
-        //    string expression = "1.342+4.5";
-        //    Queue<string> result = alg.ShuntingYardAlgorithm(expression);
-        //    throw new System.Exception("not implemented");
+        [Test]
+        public void TestSimpleConvertFloatInput()
+        {
 
+            string expression = "1.342+4.5";
+            string output = "1.342 4.5 +";
+            Queue<string> actual = CreateExpectedOuput(output);
+            Queue<string> result = alg.ShuntingYardAlgorithm(expression);
 
-        //}
+            Assert.AreEqual(actual, result);
+
+        }
+
+        [Test]
+        public void TestSimpleConvertFloatAndIntInput()
+        {
+
+        }
+
+        [Test]
+        public void TestComplexIntInput()
+        {
+
+        }
 
 
     }

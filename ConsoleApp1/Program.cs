@@ -109,7 +109,7 @@ namespace shuntingYard
             {
 
 
-                if (int.TryParse(x.ToString(), out int number))
+                if (float.TryParse(x.ToString(), out float number))
                 {
                     Ouput.Enqueue(number.ToString());
                 }
@@ -322,17 +322,7 @@ namespace shuntingYard
 
         static void Main(string[] args)
         {
-           
-            Program program = new Program();
-            string expression = "+-";
-           
-            List<string> result = program.Tokenize(expression);
-            foreach (string x in result)
-            {
-                Console.WriteLine(x);
-            }
-
-
+        
         }
     }
 
