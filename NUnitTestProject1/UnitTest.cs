@@ -31,29 +31,37 @@ namespace Tests
         {
             string expression = "+-";
             List<string> actual = alg.Tokenize(expression);
+            List<string> expected = new List<string>() { "-" };
             //to do assert
-            throw new System.Exception("not implemented");
+            Assert.AreEqual(expected, actual);
+            
         }
 
         [Test]
         public void TestIntsAndSymbolsIncorrectSyntax1()
         {
             string expression = "123+/45";
-            throw new System.Exception("not implemented");
+            List<string> actual = alg.Tokenize(expression);
+            List<string> expected = new List<string>() { "123", "/","45" };
+            Assert.AreEqual(expected, actual);
         }
 
         [Test]
         public void TestIntsAndSymbolsIncorrectSyntax2()
         {
             string expression = "156*+45";
-            throw new System.Exception("not implemented");
+            List<string> actual = alg.Tokenize(expression);
+            List<string> expected = new List<string>() { "156", "+", "45" };
+            Assert.AreEqual(expected, actual);
         }
 
         [Test]
         public void TestIntsAndSymbolsIncorrectSyntax3()
         {
             string expression = "345/-34";
-            throw new System.Exception("not implemented");
+            List<string> actual = alg.Tokenize(expression);
+            List<string> expected = new List<string>() { "345", "-", "34" };
+            Assert.AreEqual(expected, actual);
         }
 
 
@@ -63,7 +71,7 @@ namespace Tests
         {
             string expression = "+12+-553";
             List<string> result = alg.Tokenize(expression);
-            List<string> expected = new List<string>() { "+", "12", "+", "-", "553" };
+            List<string> expected = new List<string>() { "+", "12", "-", "553" };
             Assert.AreEqual(expected, result);
         }
 
@@ -83,7 +91,7 @@ namespace Tests
             string expression = "123.44";
             List<string> result = alg.Tokenize(expression);
             List<string> expected = new List<string>() { "123.44" };
-            Assert.AreEqual(expected, result);
+            Assert.AreEqual(expected, result,result.ToString());
         }
 
         [Test]
@@ -92,7 +100,7 @@ namespace Tests
             string expression = "12.33+874/90";
             List<string> result = alg.Tokenize(expression);
             List<string> actual = new List<string>() { "12.33", "+", "874", "/", "90" };
-            Assert.AreEqual(actual, result);
+            Assert.AreEqual(actual, result,result.ToString());
         }
 
         [Test]
@@ -100,14 +108,18 @@ namespace Tests
         {
             string expression = "123.56+/45.02";
             //to do
-            throw new System.Exception("not implemented");
+            List<string> result = alg.Tokenize(expression);
+            List<string> actual = new List<string>() { "123.56", "/", "45.02" };
+            Assert.AreEqual(actual, result,result.ToString());
         }
 
         [Test]
         public void TestFloatsAndSymbolsIncorrect2()
         {
             string expression = "156.99*+45.00";
-            throw new System.Exception("not implemented");
+            List<string> result = alg.Tokenize(expression);
+            List<string> actual = new List<string>() { "156.99", "+", "45.00" };
+            Assert.AreEqual(result, actual,result.ToString());
         }
 
         //Test both floats and ints
@@ -117,7 +129,7 @@ namespace Tests
             string expression = "12.3/4";
             List<string> result = alg.Tokenize(expression);
             List<string> actual = new List<string>() { "12.3", "/", "4" };
-            Assert.AreEqual(actual, result);
+            Assert.AreEqual(actual, result,result.ToString());
         }
 
         [Test]
@@ -126,32 +138,32 @@ namespace Tests
             string expression = "12.3+-5";
             List<string> result = alg.Tokenize(expression);
             List<string> actual = new List<string>() { "12.3", "+", "-","5" };
-            Assert.AreEqual(actual, result);
+            Assert.AreEqual(actual, result,result.ToString());
         }
 
 
         
         //tests both shunting-yard algorithm and tokenize
-        [Test]
-        public void TestSimpleConvert()
-        {
-            string expression = "1+2";
-            Queue<string> result = alg.ShuntingYardAlgorithm(expression);
-            //Queue<string> expected = new Queue<string>() { "1", "2", "+" };
-            throw new System.Exception("not implemented");
+        //[Test]
+        //public void TestSimpleConvert()
+        //{
+        //    string expression = "1+2";
+        //    Queue<string> result = alg.ShuntingYardAlgorithm(expression);
+        //    //Queue<string> expected = new Queue<string>() { "1", "2", "+" };
+        //    throw new System.Exception("not implemented");
 
-        }
+        //}
 
-        [Test]
-        public void TestFloatInput()
-        {
+        //[Test]
+        //public void TestFloatInput()
+        //{
 
-            string expression = "1.342+4.5";
-            Queue<string> result = alg.ShuntingYardAlgorithm(expression);
-            throw new System.Exception("not implemented");
+        //    string expression = "1.342+4.5";
+        //    Queue<string> result = alg.ShuntingYardAlgorithm(expression);
+        //    throw new System.Exception("not implemented");
 
 
-        }
+        //}
 
 
     }

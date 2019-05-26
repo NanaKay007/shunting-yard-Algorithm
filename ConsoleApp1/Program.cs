@@ -166,10 +166,6 @@ namespace shuntingYard
 
         }
 
-        private static List<T> CreateList<T>(int capacity)
-        {
-            return Enumerable.Repeat(default(T), capacity).ToList();
-        }
 
         public List<string> Tokenize(string expression)
         {
@@ -177,15 +173,24 @@ namespace shuntingYard
             //params: a string expression
             //return: a list of tokens; throws an error if an invalid token is encountered in the expression
 
-
+           
             Regex numberRegex = new Regex(@"\d+\.?\d*");
             Regex operatorRegex = new Regex(@"[\+\-\/\*]");
-            Regex invalidRegex = new Regex("[^\\d+*/-]");
+            Regex invalidRegex = new Regex("[^\\d+-.*+\\\\]");
 
 
             MatchCollection numberMatches = numberRegex.Matches(expression);
             MatchCollection operatorMatches = operatorRegex.Matches(expression);
             MatchCollection invalidMatches = invalidRegex.Matches(expression);
+
+            string[] operatorsArray = { "+", "-", "/", "*" };
+
+            //exceptions
+            if(invalidMatches.Count != 0)
+            {
+                string message = "your input contains invalid characters";
+                throw new ArgumentException(message);
+            }
 
             int size = numberMatches.Count + operatorMatches.Count;
 
@@ -228,8 +233,28 @@ namespace shuntingYard
                     if (oper != null && number != null)
                         if (number.Index > oper.Index)
                         {
-                            tokens.Add(oper.ToString());
-                            operators.Dequeue();
+                            if (tokens.Count != 0)
+                            {
+                                //if last item is an operator, replace it with oper,else just add oper
+                                string lastitem = tokens[tokens.Count - 1];
+                                if (operatorsArray.Contains(lastitem))
+                                {
+                                    tokens[tokens.Count - 1] = oper.ToString();
+                                    operators.Dequeue();
+                                }
+                                else
+                                {
+                                    tokens.Add(oper.ToString());
+                                    operators.Dequeue();
+                                }
+
+                            }
+                            else
+                            {
+                                tokens.Add(oper.ToString());
+                                operators.Dequeue();
+                            }
+
                         }
                         
                     }
@@ -244,87 +269,9 @@ namespace shuntingYard
                     operators.Dequeue();
                 }
               
-                //else
-                //{
-                //    var current_operator = oper;
-                //    while(current_operator.NextMatch() != null)
-                //    {
-                //        current_operator = current_operator.NextMatch();
-                //        if(Math.Abs(current_operator.Index - number.Index) == 1)
-                //        {
-                //            tokens.Add(current_operator.ToString());
-
-                //        }
-                //    }
-                //}
+                
             }
 
-            //int j = 0;
-
-            //for (int i = 0; i < size; i++)
-            //{
-            //Match numberMatch;
-            //Match operatorMatch;
-            
-
-            //_ = i < numberMatches.Count? numberMatch = numberMatches[i]: numberMatch = null;
-
-            //_ = i < operatorMatches.Count? operatorMatch = operatorMatches[i]: operatorMatch=null;
-
-            //if(numberMatch != null && operatorMatch != null)
-            //{
-
-
-            //        if (numberMatch.Index < operatorMatch.Index)
-            //        {
-
-            //                tokens[j] = numberMatch.ToString();
-            //                tokens[j + 1] = operatorMatch.ToString();
-
-
-            //        }
-            //        else
-            //        {
-
-
-
-
-            //            if(operatorMatch.Index < operatorMatch.NextMatch().Index)
-            //            {
-            //                tokens[j] = operatorMatch.ToString();
-            //            }
-            //            else
-            //            {
-            //                tokens[j] = operatorMatch.NextMatch().ToString();
-            //            }
-            //            tokens[j + 1] = numberMatch.ToString();
-            //        }
-            //        j += 2;
-
-            //    } 
-            //else if (numberMatch != null && operatorMatch==null)
-            //{
-            //    tokens[j] = numberMatch.ToString();
-            //        j++;
-            //}
-
-            //if(j == size)
-            //    {
-            //        return tokens;
-            //    }
-            //}
-            
-
-
-
-
-            //foreach( Match match in operatorMatches)
-            //{
-            //    foreach(Group group in match.Groups)
-            //    {
-            //        Console.WriteLine(group);
-            //    }
-            //}
 
             return tokens;
         }
@@ -334,11 +281,14 @@ namespace shuntingYard
            
             Program program = new Program();
             string expression = "+12+-553";
+           
             List<string> result = program.Tokenize(expression);
             foreach (string x in result)
             {
                 Console.WriteLine(x);
             }
+
+
         }
     }
 
