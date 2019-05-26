@@ -137,7 +137,7 @@ namespace Tests
         {
             string expression = "12.3+-5";
             List<string> result = alg.Tokenize(expression);
-            List<string> actual = new List<string>() { "12.3", "+", "-","5" };
+            List<string> actual = new List<string>() { "12.3", "-","5" };
             Assert.AreEqual(actual, result,result.ToString());
         }
 

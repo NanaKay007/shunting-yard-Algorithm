@@ -176,21 +176,12 @@ namespace shuntingYard
            
             Regex numberRegex = new Regex(@"\d+\.?\d*");
             Regex operatorRegex = new Regex(@"[\+\-\/\*]");
-            Regex invalidRegex = new Regex("[^\\d+-.*+\\\\]");
 
 
             MatchCollection numberMatches = numberRegex.Matches(expression);
             MatchCollection operatorMatches = operatorRegex.Matches(expression);
-            MatchCollection invalidMatches = invalidRegex.Matches(expression);
 
             string[] operatorsArray = { "+", "-", "/", "*" };
-
-            //exceptions
-            if(invalidMatches.Count != 0)
-            {
-                string message = "your input contains invalid characters";
-                throw new ArgumentException(message);
-            }
 
             int size = numberMatches.Count + operatorMatches.Count;
 
@@ -230,6 +221,8 @@ namespace shuntingYard
                     }
                     if(operators.Count != 0)
                     {
+
+
                     if (oper != null && number != null)
                         if (number.Index > oper.Index)
                         {
@@ -265,8 +258,27 @@ namespace shuntingYard
                 }
                     else if (oper != null && number == null)
                 {
-                    tokens.Add(oper.ToString());
-                    operators.Dequeue();
+                    if (tokens.Count != 0)
+                    {
+                        //if last item is an operator, replace it with oper,else just add oper
+                        string lastitem = tokens[tokens.Count - 1];
+                        if (operatorsArray.Contains(lastitem))
+                        {
+                            tokens[tokens.Count - 1] = oper.ToString();
+                            operators.Dequeue();
+                        }
+                        else
+                        {
+                            tokens.Add(oper.ToString());
+                            operators.Dequeue();
+                        }
+
+                    }
+                    else
+                    {
+                        tokens.Add(oper.ToString());
+                        operators.Dequeue();
+                    }
                 }
               
                 
@@ -280,7 +292,7 @@ namespace shuntingYard
         {
            
             Program program = new Program();
-            string expression = "+12+-553";
+            string expression = "+-";
            
             List<string> result = program.Tokenize(expression);
             foreach (string x in result)
