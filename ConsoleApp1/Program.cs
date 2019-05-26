@@ -13,35 +13,34 @@ namespace shuntingYard
         private string name;
         
 
-        public Operator(char symbol)
+        public Operator(string symbol)
         {
-            name = symbol.ToString();
+            name = symbol;
 
             switch (symbol)
             {
                 
-                case ('*'):
+                case "*":
                     associativity = 1;
                     precedence = 9;
                     break;
-                case ('/'):
+                case "/":
                     associativity = 1;
                     precedence = 9;
                     break;
-                case ('+'):
+                case "+":
                     associativity = 1;
                     precedence = 8;
                     break;
-                case ('-'):
+                case "-":
                     associativity = 1;
                     precedence = 8;
                     break;
-                case ('^'):
+                case "^":
                     associativity = -1;
                     precedence = 12;
                     break;
-                case ('('):
-                    
+                case "(":
                     precedence = 14;
                     break;
                 default:
@@ -103,7 +102,10 @@ namespace shuntingYard
             
             Queue<string> Ouput = new Queue<string>();
             Stack<Operator> Operators = new Stack<Operator>();
-            foreach (char x in var)
+
+            List<string> tokens = Tokenize(var);
+
+            foreach (string x in tokens)
             {
 
 
@@ -130,7 +132,7 @@ namespace shuntingYard
                     catch (Exception)
                     {
 
-                        if (x == ')')
+                        if (x == ")")
                         {
                             while (Operators.Count != 0 && Operators.Peek().GetName() != "(")
                             {
@@ -175,7 +177,7 @@ namespace shuntingYard
 
            
             Regex numberRegex = new Regex(@"\d+\.?\d*");
-            Regex operatorRegex = new Regex(@"[\+\-\/\*]");
+            Regex operatorRegex = new Regex(@"[\+\-\/\*\)\(]");
 
 
             MatchCollection numberMatches = numberRegex.Matches(expression);
@@ -232,7 +234,37 @@ namespace shuntingYard
                                 string lastitem = tokens[tokens.Count - 1];
                                 if (operatorsArray.Contains(lastitem))
                                 {
-                                    tokens[tokens.Count - 1] = oper.ToString();
+                                    //if the last operator was a - and the incoming is a -, replace the first with a +
+                                    //if the incoming was a +, do no addition
+                                    if (lastitem == "-")
+                                    {
+                                        _ = oper.ToString() == "-" ? tokens[tokens.Count - 1] = "+" : tokens[tokens.Count - 1] = oper.ToString();
+                                    }
+                                    else if (lastitem == "+")
+                                    {
+                                        if (oper.ToString() == "-")
+                                        {
+                                            tokens[tokens.Count - 1] = "-";
+                                        }
+                                        else
+                                        {
+                                            tokens[tokens.Count - 1] = oper.ToString();
+                                        }
+                                    }
+                                    else if (lastitem == "*" || lastitem=="/")
+                                    {
+                                        //if incoming is a +, leave * in place
+                                        //if incoming is a -, add - to tokens
+                                        if (oper.ToString() == "-")
+                                        {
+                                            tokens.Add(oper.ToString());
+                                        }
+                                    } else
+                                    {
+                                        tokens[tokens.Count - 1] = oper.ToString();
+                                    }
+
+
                                     operators.Dequeue();
                                 }
                                 else

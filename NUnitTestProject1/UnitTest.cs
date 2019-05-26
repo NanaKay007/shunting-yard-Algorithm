@@ -51,7 +51,7 @@ namespace Tests
         {
             string expression = "156*+45";
             List<string> actual = alg.Tokenize(expression);
-            List<string> expected = new List<string>() { "156", "+", "45" };
+            List<string> expected = new List<string>() { "156", "*", "45" };
             Assert.AreEqual(expected, actual);
         }
 
@@ -60,7 +60,7 @@ namespace Tests
         {
             string expression = "345/-34";
             List<string> actual = alg.Tokenize(expression);
-            List<string> expected = new List<string>() { "345", "-", "34" };
+            List<string> expected = new List<string>() { "345","/", "-", "34" };
             Assert.AreEqual(expected, actual);
         }
 
@@ -118,7 +118,7 @@ namespace Tests
         {
             string expression = "156.99*+45.00";
             List<string> result = alg.Tokenize(expression);
-            List<string> actual = new List<string>() { "156.99", "+", "45.00" };
+            List<string> actual = new List<string>() { "156.99", "*", "45.00" };
             Assert.AreEqual(result, actual,result.ToString());
         }
 
@@ -150,7 +150,7 @@ namespace Tests
         //    string expression = "1+2";
         //    Queue<string> result = alg.ShuntingYardAlgorithm(expression);
         //    //Queue<string> expected = new Queue<string>() { "1", "2", "+" };
-        //    throw new System.Exception("not implemented");
+           
 
         //}
 
