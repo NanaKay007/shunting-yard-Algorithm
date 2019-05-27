@@ -22,23 +22,23 @@ namespace shuntingYard
                 
                 case "*":
                     associativity = 1;
-                    precedence = 9;
+                    precedence = 3;
                     break;
                 case "/":
                     associativity = 1;
-                    precedence = 9;
+                    precedence = 3;
                     break;
                 case "+":
                     associativity = 1;
-                    precedence = 8;
+                    precedence = 2;
                     break;
                 case "-":
                     associativity = 1;
-                    precedence = 8;
+                    precedence = 2;
                     break;
                 case "^":
                     associativity = -1;
-                    precedence = 12;
+                    precedence = 4;
                     break;
                 case "(":
                     precedence = 14;
@@ -82,15 +82,6 @@ namespace shuntingYard
         {
             return name;
         }
-
-        //public override bool Equals(Operator obj)
-        //{
-        //    if (obj == null)
-        //        return false;
-        //    if (this.GetType() != obj.GetType())
-        //        return false;
-        //    return true;
-        //}
     }
 
 
@@ -100,7 +91,7 @@ namespace shuntingYard
         public Queue<string> ShuntingYardAlgorithm(string var)
         {
             
-            Queue<string> Ouput = new Queue<string>();
+            Queue<string> Output = new Queue<string>();
             Stack<Operator> Operators = new Stack<Operator>();
 
             List<string> tokens = Tokenize(var);
@@ -111,21 +102,27 @@ namespace shuntingYard
 
                 if (float.TryParse(x.ToString(), out float number))
                 {
-                    Ouput.Enqueue(number.ToString());
+                    Output.Enqueue(number.ToString());
                 }
                 else
                 {
                     try
                     {
                         Operator token = new Operator(x);
-                        if (Operators.Count != 0)
-                        {
-                            while ((Operators.Peek() > token) && Operators.Peek().GetName() != "(" || (Operators.Peek() == token) && Operators.Peek().GetAssociativity() == 1)
+                        bool breakout = false;
+                            while (!breakout && Operators.Count != 0)
                             {
-                                Operator current = Operators.Pop();
-                                Ouput.Enqueue(current.ToString());
+                                if((Operators.Peek() > token) && Operators.Peek().GetName() != "(" || (Operators.Peek() == token) && Operators.Peek().GetAssociativity() == 1)
+                                {
+                                    Operator current = Operators.Pop();
+                                    Output.Enqueue(current.ToString());
+                                }
+                                else
+                                {
+                                    breakout = true;
+                                }
                             }
-                        }
+                        
                         Operators.Push(token);
 
                     }
@@ -137,7 +134,7 @@ namespace shuntingYard
                             while (Operators.Count != 0 && Operators.Peek().GetName() != "(")
                             {
                                 Operator current = Operators.Pop();
-                                Ouput.Enqueue(current.ToString());
+                                Output.Enqueue(current.ToString());
                             }
                             if (Operators.Count != 0 && Operators.Peek().GetName() != "(")
                             {
@@ -156,14 +153,14 @@ namespace shuntingYard
                 Operator @operator = Operators.Pop();
                 if (@operator.GetName() != "(")
                 {
-                    Ouput.Enqueue(@operator.ToString());
+                    Output.Enqueue(@operator.ToString());
                 }
 
             }
 
 
           
-            return Ouput;
+            return Output;
 
 
         }
@@ -236,7 +233,12 @@ namespace shuntingYard
                                 {
                                     //if the last operator was a - and the incoming is a -, replace the first with a +
                                     //if the incoming was a +, do no addition
-                                    if (lastitem == "-")
+                                    if (oper.ToString() == "(" || oper.ToString() == ")")
+                                    {
+                                        tokens.Add(oper.ToString());
+                                    }
+
+                                    else if (lastitem == "-")
                                     {
                                         _ = oper.ToString() == "-" ? tokens[tokens.Count - 1] = "+" : tokens[tokens.Count - 1] = oper.ToString();
                                     }
@@ -246,6 +248,7 @@ namespace shuntingYard
                                         {
                                             tokens[tokens.Count - 1] = "-";
                                         }
+
                                         else
                                         {
                                             tokens[tokens.Count - 1] = oper.ToString();
@@ -261,7 +264,7 @@ namespace shuntingYard
                                         }
                                     } else
                                     {
-                                        tokens[tokens.Count - 1] = oper.ToString();
+                                        tokens.Add(oper.ToString());
                                     }
 
 
@@ -322,7 +325,12 @@ namespace shuntingYard
 
         static void Main(string[] args)
         {
-        
+            string expression = "(1+3)*(5+8)";
+            Program program = new Program();
+
+            List<string> result = program.Tokenize(expression);
+
+
         }
     }
 

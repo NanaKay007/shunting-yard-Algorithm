@@ -152,7 +152,25 @@ namespace Tests
             Assert.AreEqual(actual, result,result.ToString());
         }
 
+        //Tests with parentheses
+        [Test]
+        public void TestParenthesis()
+        {
+            string expression = "1+2*3+(5*3+5)*8";
+            List<string> actual = alg.Tokenize(expression);
+            List<string> expected = new List<string>() { "1", "+", "2", "*","3", "+", "(", "5", "*", "3", "+", "5", ")", "*", "8" };
+            Assert.AreEqual(expected, actual,actual.ToString());
 
+        }
+
+        [Test]
+        public void TestParenthesis2()
+        {
+            string expression = "(1+3)*(5+8)";
+            List<string> actual = alg.Tokenize(expression);
+            List<string> expected = new List<string>() { "(", "1", "+", "3", ")", "*", "(","5", "+", "8", ")" };
+            Assert.AreEqual(expected, actual);
+        }
         
         //tests both shunting-yard algorithm and tokenize
         [Test]
@@ -181,15 +199,23 @@ namespace Tests
         }
 
         [Test]
-        public void TestSimpleConvertFloatAndIntInput()
+        public void TestSimpleConvertIntInput2()
         {
-
+            string expression = "(1+3)*(5+8)";
+            string output = "1 3 + 5 8 + *";
+            Queue<string> actual = CreateExpectedOuput(output);
+            Queue<string> result = alg.ShuntingYardAlgorithm(expression);
+            Assert.AreEqual(result, actual);
         }
 
         [Test]
         public void TestComplexIntInput()
         {
-
+            string expression = "1+2*3+(5*3+5)*8";
+            string output = "1 2 3 * + 5 3 * 5 + 8 * +";
+            Queue<string> expected = CreateExpectedOuput(output);
+            Queue<string> result = alg.ShuntingYardAlgorithm(expression);
+            Assert.AreEqual(expected, result);
         }
 
 
