@@ -90,7 +90,11 @@ namespace shuntingYard
 
         public Queue<string> ShuntingYardAlgorithm(string var)
         {
-            
+            /*accepts an infix expression as a string; converts it into a posfix expression
+             * @param : a non-null string of length 0 to max
+             *             
+             * @return: a Queue containing tokens of the postfix equivalent of the input expression
+             */            
             Queue<string> Output = new Queue<string>();
             Stack<Operator> Operators = new Stack<Operator>();
 
@@ -168,7 +172,8 @@ namespace shuntingYard
 
         public List<string> Tokenize(string expression)
         {
-            //purpose: separates an expression into tokens; numbers and operators
+            //purpose: separates a string expression of numbers and operators into tokens; also simplifies an expression by
+            //removing excess operators
             //params: a string expression
             //return: a list of tokens; throws an error if an invalid token is encountered in the expression
 
@@ -321,6 +326,16 @@ namespace shuntingYard
 
 
             return tokens;
+        }
+
+        public int Evaluator(Queue<string> postfix)
+        {
+            /*purpose: accepts a postfix expression, computes the result of the expression 
+             * @param: a non-null queue containing tokens of a postfix in the appropriate order: queue must contain
+             * at least one number;
+             * @return: an int representing the result of the expression
+             */            
+            return 0;
         }
 
         static void Main(string[] args)
