@@ -7,7 +7,11 @@ using System.Threading.Tasks;
 
 namespace shuntingYard
 {
+#pragma warning disable CS0660 // Type defines operator == or operator != but does not override Object.Equals(object o)
+#pragma warning disable CS0661 // Type defines operator == or operator != but does not override Object.GetHashCode()
     public class Operator
+#pragma warning restore CS0661 // Type defines operator == or operator != but does not override Object.GetHashCode()
+#pragma warning restore CS0660 // Type defines operator == or operator != but does not override Object.Equals(object o)
     {
         private int precedence, associativity;
         private string name;
@@ -328,14 +332,55 @@ namespace shuntingYard
             return tokens;
         }
 
-        public int Evaluator(Queue<string> postfix)
+        public float HandleMath(float n1,float n2,string Operator)
+        {
+            switch (Operator)
+            {
+                case ("+"):
+                    return n1 + n2;
+
+                case ("-"):
+                    return n1 - n2;
+
+                case ("*"):
+                    return n1 * n2;
+
+                default:
+                    if (Operator == "/")
+                    {
+                        return 0;
+                    } else
+                    {
+                        return 0;
+                    }
+
+            }
+        }
+
+        public float Evaluator(Queue<string> postfix)
         {
             /*purpose: accepts a postfix expression, computes the result of the expression 
              * @param: a non-null queue containing tokens of a postfix in the appropriate order: queue must contain
              * at least one number;
              * @return: an int representing the result of the expression
-             */            
-            return 0;
+             */
+            Stack<float> eval = new Stack<float>();
+            foreach(string item in postfix)
+            {
+                if (float.TryParse(item,out float number))
+                {
+                    eval.Push(number);
+                }
+                else
+                {
+                    float first = eval.Pop();
+                    float second = eval.Pop();
+                    float result = HandleMath(first, second,item);
+                    eval.Push(result);
+
+                }
+            }
+            return eval.Pop();
         }
 
         static void Main(string[] args)
