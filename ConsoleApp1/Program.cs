@@ -344,15 +344,10 @@ namespace shuntingYard
 
                 case ("*"):
                     return n1 * n2;
-
+                case ("/"):
+                    return n1 / n2;
                 default:
-                    if (Operator == "/")
-                    {
-                        return 0;
-                    } else
-                    {
-                        return 0;
-                    }
+                    return 0;
 
             }
         }
@@ -374,8 +369,26 @@ namespace shuntingYard
                 else
                 {
                     float first = eval.Pop();
-                    float second = eval.Pop();
-                    float result = HandleMath(first, second,item);
+                    float result = 1;
+                    try
+                    {
+                        float second = eval.Pop();
+                        result = HandleMath(first, second, item);
+                    }
+                    catch (System.InvalidOperationException)
+                    {
+                        string intermediate = item + "1";
+                        if (float.TryParse(intermediate,out float second))
+                        {
+                            result = first * second;
+                        }
+
+                    }
+                    catch (DivideByZeroException)
+                    {
+                        return (float)Double.NaN;
+                    }
+
                     eval.Push(result);
 
                 }

@@ -54,5 +54,15 @@ namespace shuntingYardTests
             Queue<string> result = alg.ShuntingYardAlgorithm(expression);
             Assert.AreEqual(expected, result);
         }
+
+        [Test]
+        public void TestUnaryInput()
+        {
+            string expression = "-3";
+            string output = "3 -";
+            Queue<string> expected = CreateExpectedOuput(output);
+            Queue<string> result = alg.ShuntingYardAlgorithm(expression);
+            Assert.AreEqual(expected, result);
+        }
     }
 }

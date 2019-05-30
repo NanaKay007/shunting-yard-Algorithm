@@ -27,6 +27,22 @@ namespace EvaluatorTests
             Assert.AreEqual(52.0, answer);
         }
 
+        [Test]
+        public void TestUnaryPostfix()
+        {
+            string expression = "3 -";
+            Queue<string> input = CreateExpectedOuput(expression);
+            float answer = alg.Evaluator(input);
+            Assert.AreEqual(-3, answer);
+        }
 
+        [Test]
+        public void TestUnaryPostfix2()
+        {
+            string expression = "3 +";
+            Queue<string> input = CreateExpectedOuput(expression);
+            float answer = alg.Evaluator(input);
+            Assert.AreEqual(3, answer);
+        }
     }
 }
