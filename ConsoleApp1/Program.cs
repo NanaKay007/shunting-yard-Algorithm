@@ -173,7 +173,6 @@ namespace shuntingYard
 
         }
 
-
         public List<string> Tokenize(string expression)
         {
             //purpose: separates a string expression of numbers and operators into tokens; also simplifies an expression by
@@ -183,13 +182,13 @@ namespace shuntingYard
 
            
             Regex numberRegex = new Regex(@"\d+\.?\d*");
-            Regex operatorRegex = new Regex(@"[\+\-\/\*\)\(]");
+            Regex operatorRegex = new Regex(@"[\+\^\-\/\*\)\(]");
 
 
             MatchCollection numberMatches = numberRegex.Matches(expression);
             MatchCollection operatorMatches = operatorRegex.Matches(expression);
 
-            string[] operatorsArray = { "+", "-", "/", "*" };
+            string[] operatorsArray = { "+", "-", "/", "*","^" };
 
             int size = numberMatches.Count + operatorMatches.Count;
 
@@ -267,6 +266,7 @@ namespace shuntingYard
                                     {
                                         //if incoming is a +, leave * in place
                                         //if incoming is a -, add - to tokens
+                                        //if incoming is a ^, repla
                                         if (oper.ToString() == "-")
                                         {
                                             tokens.Add(oper.ToString());
@@ -346,6 +346,11 @@ namespace shuntingYard
                     return n1 * n2;
                 case ("/"):
                     return n1 / n2;
+                case ("^"):
+                    double second = (double)n2;
+                    double first = (double)n1;
+                    double ans  = Math.Pow(first,second);
+                    return (float)ans;
                 default:
                     return 0;
 
@@ -359,6 +364,7 @@ namespace shuntingYard
              * at least one number;
              * @return: an int representing the result of the expression
              */
+
             Stack<float> eval = new Stack<float>();
             foreach(string item in postfix)
             {
@@ -368,27 +374,22 @@ namespace shuntingYard
                 }
                 else
                 {
-                    float first = eval.Pop();
+                    float second = eval.Pop();
                     float result = 1;
                     try
                     {
-                        float second = eval.Pop();
+                        float first = eval.Pop();
                         result = HandleMath(first, second, item);
                     }
                     catch (System.InvalidOperationException)
                     {
                         string intermediate = item + "1";
-                        if (float.TryParse(intermediate,out float second))
+                        if (float.TryParse(intermediate,out float first))
                         {
                             result = first * second;
                         }
 
                     }
-                    catch (DivideByZeroException)
-                    {
-                        return (float)Double.NaN;
-                    }
-
                     eval.Push(result);
 
                 }
@@ -396,11 +397,16 @@ namespace shuntingYard
             return eval.Pop();
         }
 
+        public float Solve(string expression)
+        {
+            Queue<string> posfix = ShuntingYardAlgorithm(expression);
+            return Evaluator(posfix);
+        }
+
         static void Main(string[] args)
         {
             string expression = "(1+3)*(5+8)";
             Program program = new Program();
-
             List<string> result = program.Tokenize(expression);
 
 

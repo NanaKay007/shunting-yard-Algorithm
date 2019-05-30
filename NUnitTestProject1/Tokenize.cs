@@ -8,8 +8,7 @@ namespace TokenizeTests
     {
        
         //tests only tokenize
-    
-            //Ints
+        //Ints
         [Test]
         public void TestIntsOnly()
         {
@@ -154,10 +153,33 @@ namespace TokenizeTests
             List<string> expected = new List<string>() { "(", "1", "+", "3", ")", "*", "(","5", "+", "8", ")" };
             Assert.AreEqual(expected, actual);
         }
-        
+
+        [Test]
+        public void TestExponents()
+        {
+            string expression = "3^5^8";
+            List<string> actual = alg.Tokenize(expression);
+            List<string> expected = new List<string>() { "3", "^", "5", "^", "8" };
+            Assert.AreEqual(actual, expected);
+        }
         //tests both shunting-yard algorithm and tokenize
+        [Test]
+        public void TestExponentWithOther()
+        {
+            string expression = "3^-7";
+            List<string> actual = alg.Tokenize(expression);
+            List<string> expected = new List<string>() { "3", "^", "-", "7" };
+            Assert.AreEqual(actual, expected);
+        }
 
-
+        [Test]
+        public void TestExponentWithOther2()
+        {
+            string expression = "3-^7";
+            List<string> actual = alg.Tokenize(expression);
+            List<string> expected = new List<string>() { "3", "^", "7" };
+            Assert.AreEqual(expected, actual);
+        }
 
     }
 }

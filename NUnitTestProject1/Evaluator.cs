@@ -44,5 +44,26 @@ namespace EvaluatorTests
             float answer = alg.Evaluator(input);
             Assert.AreEqual(3, answer);
         }
+
+        [Test]
+        //divide by zero
+        public void DivideByZero()
+        {
+            string expression = "3 0 /";
+            Queue<string> input = CreateExpectedOuput(expression);
+            float answer = alg.Evaluator(input);
+            Assert.AreEqual(double.PositiveInfinity, answer);
+        }
+
+        [Test]
+        public void TestExponent()
+        {
+            string expression = "3 3 3 ^ ^";
+            Queue<string> input = CreateExpectedOuput(expression);
+            float answer = alg.Evaluator(input);
+            Assert.AreEqual(7.62559752E+12f, answer);
+        }
+
+       
     }
 }

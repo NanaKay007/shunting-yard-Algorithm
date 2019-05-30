@@ -15,7 +15,6 @@ namespace shuntingYardTests
         {
             string expression = "1+2";
             string output = "1 2 +";
-
             Queue<string> actual = alg.ShuntingYardAlgorithm(expression);
             Queue<string> expected = CreateExpectedOuput(output);
             Assert.AreEqual(expected, actual);
@@ -30,7 +29,6 @@ namespace shuntingYardTests
             string output = "1.342 4.5 +";
             Queue<string> actual = CreateExpectedOuput(output);
             Queue<string> result = alg.ShuntingYardAlgorithm(expression);
-
             Assert.AreEqual(actual, result);
 
         }
@@ -63,6 +61,13 @@ namespace shuntingYardTests
             Queue<string> expected = CreateExpectedOuput(output);
             Queue<string> result = alg.ShuntingYardAlgorithm(expression);
             Assert.AreEqual(expected, result);
+        }
+
+        [Test]
+        public void TestExponent()
+        {
+            //string expression = "3^3";
+            //string output = 
         }
     }
 }
