@@ -234,9 +234,9 @@ namespace shuntingYard
                                 string beforelastitem = "";
                                 string lastitem = tokens[tokens.Count - 1];
 
-                                _ = tokens.Count >= 3 ? beforelastitem = tokens[tokens.Count - 2] : null;
+                                _ = tokens.Count >= 2 ? beforelastitem = tokens[tokens.Count - 2] : null;
 
-                                if (beforelastitem == "^" || beforelastitem == "/" || beforelastitem == "*" && lastitem == "-")
+                                if (beforelastitem == "^" || beforelastitem == "/" ||beforelastitem == ")" || beforelastitem =="(" || beforelastitem == "*" && lastitem == "-")
                                 {
                                     tokens[tokens.Count - 1] += number.ToString();
                                 }

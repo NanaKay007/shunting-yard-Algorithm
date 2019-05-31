@@ -184,9 +184,9 @@ namespace TokenizeTests
         [Test]
         public void TestExponentWithNegativeOther()
         {
-            string expression = "(3^3)^-3";
+            string expression = "(-3^3)^-3";
             List<string> actual = alg.Tokenize(expression);
-            List<string> expected = new List<string>() { "(", "3", "^", "3", ")", "^", "-3" };
+            List<string> expected = new List<string>() { "(", "-3", "^", "3", ")", "^", "-3" };
             Assert.AreEqual(expected, actual);
         }
 
