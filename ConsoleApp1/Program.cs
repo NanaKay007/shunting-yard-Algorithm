@@ -173,14 +173,6 @@ namespace shuntingYard
 
         }
 
-        public string EvalUrinary(string first,string second,string third)
-        {
-            string answer ="";
-
-            //if(first != "-" && second == "-")
-            return answer;
-        }
-
         public List<string> Tokenize(string expression)
         {
             //purpose: separates a string expression of numbers and operators into tokens; also simplifies an expression by
