@@ -173,6 +173,14 @@ namespace shuntingYard
 
         }
 
+        public string EvalUrinary(string first,string second,string third)
+        {
+            string answer ="";
+
+            //if(first != "-" && second == "-")
+            return answer;
+        }
+
         public List<string> Tokenize(string expression)
         {
             //purpose: separates a string expression of numbers and operators into tokens; also simplifies an expression by
@@ -207,7 +215,7 @@ namespace shuntingYard
                 operators.Enqueue(oper);
             }
 
-            for(int i = 0; i < size; i++)
+            for (int i = 0; i < size; i++)
             {
                 Match number;
                 Match oper;
@@ -216,18 +224,38 @@ namespace shuntingYard
                 _ = operators.Count != 0 ? oper = operators.Peek() : oper = null;
 
 
-                    if (numbers.Count!= 0)
-                    {
-                    if(oper != null && number != null)
+                if (numbers.Count != 0)
+                {
+                    if (oper != null && number != null)
                         if (number.Index < oper.Index)
                         {
-                            tokens.Add(number.ToString());
+                            if(tokens.Count != 0)
+                            {
+                                string beforelastitem = "";
+                                string lastitem = tokens[tokens.Count - 1];
+
+                                _ = tokens.Count >= 3 ? beforelastitem = tokens[tokens.Count - 2] : null;
+
+                                if (beforelastitem == "^" || beforelastitem == "/" || beforelastitem == "*" && lastitem == "-")
+                                {
+                                    tokens[tokens.Count - 1] += number.ToString();
+                                }
+                                else
+                                {
+                                    tokens.Add(number.ToString());
+                                }
+                            } else
+                            {
+                                tokens.Add(number.ToString());
+                            }
+
+
                             numbers.Dequeue();
                         }
-                        
-                    }
-                    if(operators.Count != 0)
-                    {
+
+                }
+                if (operators.Count != 0)
+                {
 
 
                     if (oper != null && number != null)
@@ -262,7 +290,7 @@ namespace shuntingYard
                                             tokens[tokens.Count - 1] = oper.ToString();
                                         }
                                     }
-                                    else if (lastitem == "*" || lastitem=="/")
+                                    else if (lastitem == "*" || lastitem == "/")
                                     {
                                         //if incoming is a +, leave * in place
                                         //if incoming is a -, add - to tokens
@@ -271,7 +299,8 @@ namespace shuntingYard
                                         {
                                             tokens.Add(oper.ToString());
                                         }
-                                    } else
+                                    }
+                                    else
                                     {
                                         tokens.Add(oper.ToString());
                                     }
@@ -293,14 +322,34 @@ namespace shuntingYard
                             }
 
                         }
-                        
-                    }
-                    if(oper == null && number != null)
+
+                }
+                if (oper == null && number != null)
                 {
-                    tokens.Add(number.ToString());
+                    if (tokens.Count != 0)
+                    {
+                        string beforelastitem = "";
+                        string lastitem = tokens[tokens.Count - 1];
+
+                        _ = tokens.Count >= 3 ? beforelastitem = tokens[tokens.Count - 2] : null;
+
+                        if (beforelastitem == "^" || beforelastitem == "/" || beforelastitem == "*" && lastitem == "-")
+                        {
+                            tokens[tokens.Count - 1] += number.ToString();
+                        }
+                        else
+                        {
+                            tokens.Add(number.ToString());
+                        }
+                    }
+                    else
+                    {
+                        tokens.Add(number.ToString());
+                    }
+
                     numbers.Dequeue();
                 }
-                    else if (oper != null && number == null)
+                else if (oper != null && number == null)
                 {
                     if (tokens.Count != 0)
                     {
@@ -324,10 +373,9 @@ namespace shuntingYard
                         operators.Dequeue();
                     }
                 }
-              
-                
-            }
 
+
+            }
 
             return tokens;
         }

@@ -66,8 +66,11 @@ namespace shuntingYardTests
         [Test]
         public void TestExponent()
         {
-            //string expression = "3^3";
-            //string output = 
+            string expression = "(3^3)^-3";
+            string output = "3 3 ^ -3 ^";
+            Queue<string> result = alg.ShuntingYardAlgorithm(expression);
+            Queue<string> expected = CreateExpectedOuput(output);
+            Assert.AreEqual(expected, result);
         }
     }
 }

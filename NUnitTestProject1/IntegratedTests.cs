@@ -14,5 +14,21 @@ namespace IntegratedTest
             float answer = alg.Solve(expression);
             Assert.AreEqual(19683, answer);
         }
+
+        [Test]
+        public void TestNegativeExponentWithBrackets()
+        {
+            string expression = "(3^3)^-3";
+            float answer = alg.Solve(expression);
+            Assert.AreEqual(5.08052617E-05f, answer);
+        }
+
+        [Test]
+        public void TestNegativeAndNegative()
+        {
+            string expression = "-2+3^-3";
+            float answer = alg.Solve(expression);
+            Assert.AreEqual(-1.96296296296f, answer);
+        }
     }
 }

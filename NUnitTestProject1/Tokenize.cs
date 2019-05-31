@@ -53,7 +53,7 @@ namespace TokenizeTests
         {
             string expression = "345/-34";
             List<string> actual = alg.Tokenize(expression);
-            List<string> expected = new List<string>() { "345","/", "-", "34" };
+            List<string> expected = new List<string>() { "345","/", "-34" };
             Assert.AreEqual(expected, actual);
         }
 
@@ -168,7 +168,7 @@ namespace TokenizeTests
         {
             string expression = "3^-7";
             List<string> actual = alg.Tokenize(expression);
-            List<string> expected = new List<string>() { "3", "^", "-", "7" };
+            List<string> expected = new List<string>() { "3", "^", "-7" };
             Assert.AreEqual(actual, expected);
         }
 
@@ -178,6 +178,15 @@ namespace TokenizeTests
             string expression = "3-^7";
             List<string> actual = alg.Tokenize(expression);
             List<string> expected = new List<string>() { "3", "^", "7" };
+            Assert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void TestExponentWithNegativeOther()
+        {
+            string expression = "(3^3)^-3";
+            List<string> actual = alg.Tokenize(expression);
+            List<string> expected = new List<string>() { "(", "3", "^", "3", ")", "^", "-3" };
             Assert.AreEqual(expected, actual);
         }
 
