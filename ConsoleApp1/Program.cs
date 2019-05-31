@@ -434,7 +434,12 @@ namespace shuntingYard
 
                 }
             }
-            return eval.Pop();
+            if(eval.Count != 0)
+            {
+                return eval.Pop();
+            }
+            return 0;
+
         }
 
         public float Solve(string expression)
