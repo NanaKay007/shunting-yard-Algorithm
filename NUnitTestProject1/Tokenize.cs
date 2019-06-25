@@ -190,5 +190,33 @@ namespace TokenizeTests
             Assert.AreEqual(expected, actual);
         }
 
+        //Logarithm (base 10) tests
+        [Test]
+        public void TestLogarithm1()
+        {
+            string expression = "3*log(90)";
+            List<string> actual = alg.Tokenize(expression);
+            List<string> expected = new List<string>() { "3", "*", "log", "(", "90", ")" };
+            Assert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void ComplexLogarithm()
+        {
+            string expression = "3*log((84+5*5)^10)";
+            List<string> actual = alg.Tokenize(expression);
+            List<string> expected = new List<string>() { "3", "*", "log", "(", "(", "84", "+", "5", "*", "5", ")", "^", "10", ")" };
+            Assert.AreEqual(expected, actual);
+        }
+
+        //Logarithm base y tests
+        [Test]
+        public void TestLogarithmWithBase()
+        {
+            string expression = "log~Base6~(50)";
+            List<string> actual = alg.Tokenize(expression);
+            List<string> expected = new List<string>() { "log", "~Base6~", "(", "50", ")" };
+            Assert.AreEqual(expected, actual);
+        }
     }
 }

@@ -182,7 +182,7 @@ namespace shuntingYard
 
            
             Regex numberRegex = new Regex(@"\d+\.?\d*");
-            Regex operatorRegex = new Regex(@"[\+\^\-\/\*\)\(]");
+            Regex operatorRegex = new Regex(@"[\+\^\-\/\*\)\(]|(log)|(max)|(ln)|(cosh)|(cos)|(acos)|(sin)|(sinh)|(asin)|(tan)|(atan)|(tanh)|(~Base(\d+\.?\d*)+~)");
 
 
             MatchCollection numberMatches = numberRegex.Matches(expression);
@@ -206,11 +206,13 @@ namespace shuntingYard
             {
                 operators.Enqueue(oper);
             }
+            int last_added_index = 0;
 
             for (int i = 0; i < size; i++)
             {
                 Match number;
                 Match oper;
+
 
                 _ = numbers.Count != 0 ? number = numbers.Peek() : number = null;
                 _ = operators.Count != 0 ? oper = operators.Peek() : oper = null;
@@ -219,7 +221,7 @@ namespace shuntingYard
                 if (numbers.Count != 0)
                 {
                     if (oper != null && number != null)
-                        if (number.Index < oper.Index)
+                        if (number.Index < oper.Index && number.Index >= last_added_index)
                         {
                             if(tokens.Count != 0)
                             {
@@ -228,20 +230,26 @@ namespace shuntingYard
 
                                 _ = tokens.Count >= 2 ? beforelastitem = tokens[tokens.Count - 2] : null;
 
-                                if (beforelastitem == "^" || beforelastitem == "/" ||beforelastitem == ")" || beforelastitem =="(" || beforelastitem == "*" && lastitem == "-")
+                                if ((beforelastitem == "^" || beforelastitem == "/" ||beforelastitem == ")" || beforelastitem =="(" || beforelastitem == "*") && lastitem == "-")
                                 {
                                     tokens[tokens.Count - 1] += number.ToString();
                                 }
                                 else
                                 {
+                                    last_added_index = number.Index+number.Length;
                                     tokens.Add(number.ToString());
                                 }
                             } else
                             {
+                                last_added_index = number.Index+number.Length;
                                 tokens.Add(number.ToString());
                             }
 
 
+                            numbers.Dequeue();
+                        }
+                        else if (number.Index < oper.Index && number.Index <= last_added_index)
+                        {
                             numbers.Dequeue();
                         }
 
@@ -251,7 +259,7 @@ namespace shuntingYard
 
 
                     if (oper != null && number != null)
-                        if (number.Index > oper.Index)
+                        if (number.Index > oper.Index && oper.Index >= last_added_index)
                         {
                             if (tokens.Count != 0)
                             {
@@ -263,6 +271,7 @@ namespace shuntingYard
                                     //if the incoming was a +, do no addition
                                     if (oper.ToString() == "(" || oper.ToString() == ")")
                                     {
+                                        last_added_index = oper.Index+oper.Length;
                                         tokens.Add(oper.ToString());
                                     }
 
@@ -272,15 +281,8 @@ namespace shuntingYard
                                     }
                                     else if (lastitem == "+")
                                     {
-                                        if (oper.ToString() == "-")
-                                        {
-                                            tokens[tokens.Count - 1] = "-";
-                                        }
-
-                                        else
-                                        {
-                                            tokens[tokens.Count - 1] = oper.ToString();
-                                        }
+                                        tokens[tokens.Count - 1] = oper.ToString();
+                     
                                     }
                                     else if (lastitem == "*" || lastitem == "/")
                                     {
@@ -289,11 +291,25 @@ namespace shuntingYard
                                         //if incoming is a ^, repla
                                         if (oper.ToString() == "-")
                                         {
+                                            last_added_index = oper.Index+oper.Length;
+                                            tokens.Add(oper.ToString());
+                                        } else if(oper.ToString() == "^")
+                                        {
+                                            tokens[tokens.Count - 1] = "^";
+                                        } else if (oper.ToString() == "+")
+                                        {
+
+                                        }
+
+                                        else
+                                        {
+                                            last_added_index = oper.Index+oper.Length;
                                             tokens.Add(oper.ToString());
                                         }
                                     }
                                     else
                                     {
+                                        last_added_index = oper.Index+oper.Length;
                                         tokens.Add(oper.ToString());
                                     }
 
@@ -302,6 +318,7 @@ namespace shuntingYard
                                 }
                                 else
                                 {
+                                    last_added_index = oper.Index+oper.Length;
                                     tokens.Add(oper.ToString());
                                     operators.Dequeue();
                                 }
@@ -309,16 +326,22 @@ namespace shuntingYard
                             }
                             else
                             {
+                                last_added_index = oper.Index + oper.Length;
                                 tokens.Add(oper.ToString());
                                 operators.Dequeue();
                             }
 
                         }
-
+                        else if (oper.Index > number.Index && oper.Index>= last_added_index)
+                        {
+                            tokens.Add(oper.ToString());
+                            last_added_index = oper.Index + oper.Length;
+                            operators.Dequeue();
+                        }
                 }
                 if (oper == null && number != null)
                 {
-                    if (tokens.Count != 0)
+                    if (tokens.Count != 0 && number.Index >= last_added_index)
                     {
                         string beforelastitem = "";
                         string lastitem = tokens[tokens.Count - 1];
@@ -331,11 +354,13 @@ namespace shuntingYard
                         }
                         else
                         {
+                            last_added_index = number.Index+number.Length;
                             tokens.Add(number.ToString());
                         }
                     }
                     else
                     {
+                        last_added_index = number.Index+number.Length;
                         tokens.Add(number.ToString());
                     }
 
@@ -343,7 +368,7 @@ namespace shuntingYard
                 }
                 else if (oper != null && number == null)
                 {
-                    if (tokens.Count != 0)
+                    if (tokens.Count !=0  && oper.Index >= last_added_index)
                     {
                         //if last item is an operator, replace it with oper,else just add oper
                         string lastitem = tokens[tokens.Count - 1];
@@ -354,6 +379,7 @@ namespace shuntingYard
                         }
                         else
                         {
+                            last_added_index = oper.Index+oper.Length;
                             tokens.Add(oper.ToString());
                             operators.Dequeue();
                         }
@@ -361,6 +387,7 @@ namespace shuntingYard
                     }
                     else
                     {
+                        last_added_index = oper.Index+oper.Length;
                         tokens.Add(oper.ToString());
                         operators.Dequeue();
                     }
