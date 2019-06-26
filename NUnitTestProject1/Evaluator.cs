@@ -64,6 +64,6 @@ namespace EvaluatorTests
             Assert.AreEqual(7.62559752E+12f, answer);
         }
 
-       
+       //
     }
 }

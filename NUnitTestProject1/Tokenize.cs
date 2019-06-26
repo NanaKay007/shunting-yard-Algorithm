@@ -218,5 +218,46 @@ namespace TokenizeTests
             List<string> expected = new List<string>() { "log", "~Base6~", "(", "50", ")" };
             Assert.AreEqual(expected, actual);
         }
+
+
+        //Max
+        [Test]
+        public void TestMax()
+        {
+            string expression = "max(345,893)";
+            List<string> actual = alg.Tokenize(expression);
+            List<string> expected = new List<string>() { "max", "(", "345",",", "893", ")" };
+            Assert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void TestComplexMax()
+        {
+            string expression = "max((4*5-384),(56^738))";
+            List<string> actual = alg.Tokenize(expression);
+            List<string> expected = new List<string>() { "max", "(", "(", "4", "*","5", "-", "384", ")", ",", "(", "56", "^", "738", ")", ")" };
+            Assert.AreEqual(expected, actual);
+        }
+
+
+        //ln
+        [Test]
+        public void SimpleNaturalLog()
+        {
+            string expression = "ln(76)";
+            List<string> actual = alg.Tokenize(expression);
+            List<string> expected = new List<string>() { "ln", "(", "76", ")" };
+            Assert.AreEqual(expected, actual);
+        }
+
+
+        [Test]
+        public void ComplexNaturalLog()
+        {
+            string expression = "ln(max(54,89*40))";
+            List<string> actual = alg.Tokenize(expression);
+            List<string> expected = new List<string>() { "ln", "(", "max", "(", "54", ",", "89", "*", "40", ")", ")" };
+            Assert.AreEqual(expected, actual);
+        }
     }
 }

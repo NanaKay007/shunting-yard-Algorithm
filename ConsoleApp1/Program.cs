@@ -15,15 +15,21 @@ namespace shuntingYard
     {
         private int precedence, associativity;
         private string name;
-        
+        private bool isFunction;
 
         public Operator(string symbol)
         {
             name = symbol;
+            
 
             switch (symbol)
             {
-                
+                case "sin":
+                    isFunction = true;
+                    break;
+                case "max":
+                    isFunction = true;
+                    break;
                 case "*":
                     associativity = 1;
                     precedence = 3;
@@ -51,6 +57,8 @@ namespace shuntingYard
                     throw new Exception("invalid operator") ;
             }
         }
+
+        public bool IsFunction() => isFunction;
 
         public string GetName() => name;
 
@@ -117,10 +125,21 @@ namespace shuntingYard
                     try
                     {
                         Operator token = new Operator(x);
-                        bool breakout = false;
+
+                        if (token.IsFunction())
+                        {
+                            Operators.Push(token);
+                        }
+                        else if (x == "(")
+                        {
+                            Operators.Push(token);
+                        }
+                        else
+                        {
+                            bool breakout = false;
                             while (!breakout && Operators.Count != 0)
                             {
-                                if((Operators.Peek() > token) && Operators.Peek().GetName() != "(" || (Operators.Peek() == token) && Operators.Peek().GetAssociativity() == 1)
+                                if ((Operators.Peek() > token) && Operators.Peek().GetName() != "(" ||Operators.Peek().IsFunction()|| (Operators.Peek() == token) && Operators.Peek().GetAssociativity() == 1)
                                 {
                                     Operator current = Operators.Pop();
                                     Output.Enqueue(current.ToString());
@@ -130,8 +149,10 @@ namespace shuntingYard
                                     breakout = true;
                                 }
                             }
+
+                            Operators.Push(token);
+                        }
                         
-                        Operators.Push(token);
 
                     }
                     catch (Exception)
@@ -139,10 +160,14 @@ namespace shuntingYard
 
                         if (x == ")")
                         {
-                            while (Operators.Count != 0 && Operators.Peek().GetName() != "(")
+                            while (Operators.Count != 0)
                             {
-                                Operator current = Operators.Pop();
-                                Output.Enqueue(current.ToString());
+                                if (Operators.Peek().GetName() != "(")
+                                {
+                                    Operator current = Operators.Pop();
+                                    Output.Enqueue(current.ToString());
+                                }
+
                             }
                             if (Operators.Count != 0 && Operators.Peek().GetName() != "(")
                             {
@@ -182,7 +207,7 @@ namespace shuntingYard
 
            
             Regex numberRegex = new Regex(@"\d+\.?\d*");
-            Regex operatorRegex = new Regex(@"[\+\^\-\/\*\)\(]|(log)|(max)|(ln)|(cosh)|(cos)|(acos)|(sin)|(sinh)|(asin)|(tan)|(atan)|(tanh)|(~Base(\d+\.?\d*)+~)");
+            Regex operatorRegex = new Regex(@"[\+\^\-\/\*\)\(,]|(log)|(max)|(min)|(ln)|(cosh)|(cos)|(acos)|(sin)|(sinh)|(asin)|(tan)|(atan)|(tanh)|(~Base(\d+\.?\d*)+~)");
 
 
             MatchCollection numberMatches = numberRegex.Matches(expression);
@@ -480,7 +505,6 @@ namespace shuntingYard
             string expression = "(1+3)*(5+8)";
             Program program = new Program();
             List<string> result = program.Tokenize(expression);
-
 
         }
     }
