@@ -64,6 +64,24 @@ namespace EvaluatorTests
             Assert.AreEqual(7.62559752E+12f, answer);
         }
 
-       //
+       //max
+       [Test]
+       public void TestSimpleMax()
+        {
+            string expression = "2 3 max";
+            Queue<string> input = CreateExpectedOuput(expression);
+            float answer = alg.Evaluator(input);
+            Assert.AreEqual(3, answer);
+        }
+
+        [Test]
+        public void TestSimpleMin()
+        {
+            string expression = "489233 883999 * -1 min";
+            Queue<string> input = CreateExpectedOuput(expression);
+            float answer = alg.Evaluator(input);
+            Assert.AreEqual(-1, answer);
+        }
+
     }
 }

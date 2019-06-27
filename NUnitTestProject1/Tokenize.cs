@@ -239,7 +239,14 @@ namespace TokenizeTests
             Assert.AreEqual(expected, actual);
         }
 
-
+        [Test]
+        public void TestComplexMin()
+        {
+            string expression = "min(489233*883999389393,0)";
+            List<string> actual = alg.Tokenize(expression);
+            List<string> expected = new List<string> { "min", "(", "489233", "*", "883999389393", ",", "0" ,")"};
+            Assert.AreEqual(expected, actual);
+        }
         //ln
         [Test]
         public void SimpleNaturalLog()

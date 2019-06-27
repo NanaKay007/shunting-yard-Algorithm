@@ -75,7 +75,7 @@ namespace shuntingYardTests
 
 
         [Test]
-        public void TestSimpleFunction()
+        public void TestSimpleMax()
         {
             string expression = "max(2,3)";
             string output = "2 3 max";
@@ -84,6 +84,56 @@ namespace shuntingYardTests
             Assert.AreEqual(expected, result);
         }
 
+        [Test]
+        public void TestSimpleMin()
+        {
+            string expression = "min((489233*883999),0)";
+            string output = "489233 883999 * 0 min";
+            Queue<string> result = alg.ShuntingYardAlgorithm(expression);
+            Queue<string> expected = CreateExpectedOuput(output);
+            Assert.AreEqual(expected, result);
+        }
+
+        [Test]
+        public void TestImplicitBraces()
+        {
+            string expression = "min(489233*883999/10,0)";
+            string output = "489233 883999 * 10 / 0 min";
+            Queue<string> result = alg.ShuntingYardAlgorithm(expression);
+            Queue<string> expected = CreateExpectedOuput(output);
+            Assert.AreEqual(expected, result);
+        }
+
+        [Test]
+        public void TestImplicitBraces2()
+        {
+            string expression = "min((489233*883999)/10,0)";
+            string output = "489233 883999 * 10 / 0 min";
+            Queue<string> result = alg.ShuntingYardAlgorithm(expression);
+            Queue<string> expected = CreateExpectedOuput(output);
+            Assert.AreEqual(expected, result);
+        }
+
+
+        [Test]
+        public void TestImplicitBraces3()
+        {
+            string expression = "min((489233*883999)/10,(120*4)*0)";
+            string output = "489233 883999 * 10 / 120 4 * 0 * min";
+            Queue<string> result = alg.ShuntingYardAlgorithm(expression);
+            Queue<string> expected = CreateExpectedOuput(output);
+            Assert.AreEqual(expected, result);
+        }
+
+        [Test]
+        public void TestImplicitBraces4()
+        {
+            string expression = "min((489233*883999)/10,120+4*0)";
+            string output = "489233 883999 * 10 / 120 4 0 * + min";
+            Queue<string> result = alg.ShuntingYardAlgorithm(expression);
+            Queue<string> expected = CreateExpectedOuput(output);
+            Assert.AreEqual(expected, result);
+        }
 
         [Test]
         public void TestComplexFunctions()

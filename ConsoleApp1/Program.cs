@@ -24,10 +24,50 @@ namespace shuntingYard
 
             switch (symbol)
             {
+                case "abs":
+                    isFunction = true;
+                    break;
                 case "sin":
                     isFunction = true;
                     break;
+                case "asin":
+                    isFunction = true;
+                    break;
+                case "sinh":
+                    isFunction = true;
+                    break;
                 case "max":
+                    isFunction = true;
+                    break;
+                case "min":
+                    isFunction = true;
+                    break;
+                case "log":
+                    isFunction = true;
+                    break;
+                case "cos":
+                    isFunction = true;
+                    break;
+                case "acos":
+                    isFunction = true;
+                    break;
+                case "cosh":
+                    isFunction = true;
+                    break;
+                case "tan":
+                    isFunction = true;
+                    break;
+                case "atan":
+                    isFunction = true;
+                    break;
+                case "tanh":
+                    isFunction = true;
+                    break;
+                case "ln":
+                    isFunction = true;
+                    break;
+                //log with base
+                case "logB":
                     isFunction = true;
                     break;
                 case "*":
@@ -121,7 +161,11 @@ namespace shuntingYard
                     Output.Enqueue(number.ToString());
                 } else if (x == ",")
                 {
-                    //do nothing
+                    //do nothing...maybe not
+                    while(Operators.Peek().GetName() != "(")
+                    {
+                        Output.Enqueue(Operators.Pop().ToString());
+                    }
                 }
                 else
                 {
@@ -442,12 +486,57 @@ namespace shuntingYard
                     return (float)ans;
                 case "max":
                     return Math.Max(n1, n2);
-                case "sin":
-                    return Math.Sin()
+                case "min":
+                    return Math.Min(n1, n2);
+                
                 default:
                     return 0;
 
             }
+        }
+
+        public double HandleOneInputMath(float n1,string Operator,int log_base = 0)
+        {
+            //purpose: calculates the result of a one-input function
+            //params: float and operator
+            //return: the result, float
+
+            switch (Operator)
+            {
+                case "abs":
+                    return Math.Abs(n1);
+                case "sin":
+
+                    return Math.Sin(n1);
+                case "asin":
+                    return Math.Asin(n1);
+                case "sinh":
+                    return Math.Sinh(n1);
+
+
+                case "cos":
+                    return Math.Cos(n1);
+                case "acos":
+                    return Math.Acos(n1);
+                case "cosh":
+                    return Math.Cosh(n1);
+
+                case "tan":
+                    return Math.Tan(n1);
+                case "atan":
+                    return Math.Atan(n1);
+                case "tanh":
+                    return Math.Tanh(n1);
+
+                case "log":
+                    return Math.Log10(n1);
+                case "ln":
+                    return Math.Log(n1);
+                default:
+                    return 0;
+                    break;
+            }
+
         }
 
         public float Evaluator(Queue<string> postfix)
@@ -467,22 +556,41 @@ namespace shuntingYard
                 }
                 else
                 {
+                    Operator @operator = new Operator(item);
                     float second = eval.Pop();
                     float result = 1;
-                    try
-                    {
-                        float first = eval.Pop();
-                        result = HandleMath(first, second, item);
-                    }
-                    catch (System.InvalidOperationException)
-                    {
-                        string intermediate = item + "1";
-                        if (float.TryParse(intermediate,out float first))
-                        {
-                            result = first * second;
-                        }
 
+                    if (@operator.IsFunction())
+                    {
+                        if(!(@operator.GetName() == "max" || @operator.GetName() == "min"))
+                        {
+                            result = (float) HandleOneInputMath(second,item);
+                        }
+                        else
+                        {
+                            float first = eval.Pop();
+                            result = HandleMath(first, second, item);
+                        }
+                    } else
+                    {
+                        
+                        try
+                        {
+                            float first = eval.Pop();
+                            result = HandleMath(first, second, item);
+                        }
+                        catch (System.InvalidOperationException)
+                        {
+                            string intermediate = item + "1";
+                            if (float.TryParse(intermediate, out float first))
+                            {
+                                result = first * second;
+                            }
+
+                        }
                     }
+
+                    
                     eval.Push(result);
 
                 }
