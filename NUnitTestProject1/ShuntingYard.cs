@@ -74,12 +74,22 @@ namespace shuntingYardTests
         }
 
 
-        //log
+        [Test]
+        public void TestSimpleFunction()
+        {
+            string expression = "max(2,3)";
+            string output = "2 3 max";
+            Queue<string> result = alg.ShuntingYardAlgorithm(expression);
+            Queue<string> expected = CreateExpectedOuput(output);
+            Assert.AreEqual(expected, result);
+        }
+
+
         [Test]
         public void TestComplexFunctions()
         {
-            string expression = "sin ( max ( 2, 3 ) ÷ 3 * 10 )";
-            string output = "2 3 max 3 ÷ 10 * sin";
+            string expression = "sin ( max ( 2, 3 ) / 3 * 10 )";
+            string output = "2 3 max 3 / 10 * sin";
             Queue<string> result = alg.ShuntingYardAlgorithm(expression);
             Queue<string> expected = CreateExpectedOuput(output);
             Assert.AreEqual(expected, result);

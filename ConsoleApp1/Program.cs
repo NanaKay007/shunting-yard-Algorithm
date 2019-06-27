@@ -119,10 +119,13 @@ namespace shuntingYard
                 if (float.TryParse(x.ToString(), out float number))
                 {
                     Output.Enqueue(number.ToString());
+                } else if (x == ",")
+                {
+                    //do nothing
                 }
                 else
                 {
-                    try
+                    if (x != ")")
                     {
                         Operator token = new Operator(x);
 
@@ -155,26 +158,20 @@ namespace shuntingYard
                         
 
                     }
-                    catch (Exception)
-                    {
-
-                        if (x == ")")
+                        else 
                         {
-                            while (Operators.Count != 0)
-                            {
-                                if (Operators.Peek().GetName() != "(")
-                                {
-                                    Operator current = Operators.Pop();
-                                    Output.Enqueue(current.ToString());
-                                }
-
-                            }
-                            if (Operators.Count != 0 && Operators.Peek().GetName() != "(")
-                            {
-                                Operators.Pop();
-                            }
+                            while(Operators.Peek().GetName()!= "(")
+                        {
+                            Output.Enqueue(Operators.Pop().ToString());
                         }
-                    }
+                            if(Operators.Peek().GetName() == "(")
+                        {
+                            Operators.Pop();
+                        }
+                            
+                            
+                        }
+                    
 
 
                 }
@@ -443,6 +440,10 @@ namespace shuntingYard
                     double first = (double)n1;
                     double ans  = Math.Pow(first,second);
                     return (float)ans;
+                case "max":
+                    return Math.Max(n1, n2);
+                case "sin":
+                    return Math.Sin()
                 default:
                     return 0;
 
