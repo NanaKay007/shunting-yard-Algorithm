@@ -145,5 +145,17 @@ namespace shuntingYardTests
             Assert.AreEqual(expected, result);
 
         }
+
+        [Test]
+        public void TestLogBase()
+        {
+            string expression = "logB[6](50)";
+            string output = "50 logB[6]";
+            Queue<string> result = alg.ShuntingYardAlgorithm(expression);
+            Queue<string> expected = CreateExpectedOuput(output);
+            Assert.AreEqual(expected, result);
+        }
+
+        
     }
 }

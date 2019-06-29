@@ -73,7 +73,7 @@ namespace EvaluatorTests
             float answer = alg.Evaluator(input);
             Assert.AreEqual(3, answer);
         }
-
+        //Min
         [Test]
         public void TestSimpleMin()
         {
@@ -82,6 +82,36 @@ namespace EvaluatorTests
             float answer = alg.Evaluator(input);
             Assert.AreEqual(-1, answer);
         }
+        //log base
 
+        [Test]
+        public void TestSimpleLogBase()
+        {
+            string expression = "4 logB[2]";
+            Queue<string> input = CreateExpectedOuput(expression);
+            float answer = alg.Evaluator(input);
+            Assert.AreEqual(2, answer);
+        }
+
+        //ln
+        [Test]
+        public void TestNaturalLog()
+        {
+            string expression = "2.71828 ln";
+            Queue<string> input = CreateExpectedOuput(expression);
+            float answer = alg.Evaluator(input);
+            Assert.AreEqual(0.999999344f, answer);
+        }
+
+        //sin
+        [Test]
+        public void TestSin()
+        {
+            string expression = "180 + sin";
+            Queue<string> input = CreateExpectedOuput(expression);
+            float answer = alg.Evaluator(input);
+            Assert.AreEqual(0, answer);
+            
+        }
     }
 }

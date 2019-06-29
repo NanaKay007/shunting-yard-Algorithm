@@ -27,8 +27,18 @@ namespace IntegratedTest
         public void TestNegativeAndNegative()
         {
             string expression = "-2+3^-3";
+            
             float answer = alg.Solve(expression);
             Assert.AreEqual(-1.96296296296f, answer);
         }
+
+        [Test]
+        public void TestRoots()
+        {
+            string expression = "27^(1/3)";
+            float answer = alg.Solve(expression);
+            Assert.AreEqual(3, answer);
+        }
+
     }
 }

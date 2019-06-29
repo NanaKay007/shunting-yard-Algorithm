@@ -213,9 +213,9 @@ namespace TokenizeTests
         [Test]
         public void TestLogarithmWithBase()
         {
-            string expression = "log~Base6~(50)";
+            string expression = "logB[6](50)";
             List<string> actual = alg.Tokenize(expression);
-            List<string> expected = new List<string>() { "log", "~Base6~", "(", "50", ")" };
+            List<string> expected = new List<string>() { "logB[6]", "(", "50", ")" };
             Assert.AreEqual(expected, actual);
         }
 

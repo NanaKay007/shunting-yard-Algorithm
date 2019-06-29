@@ -94,6 +94,11 @@ namespace shuntingYard
                     precedence = 14;
                     break;
                 default:
+                    if (symbol.Contains("logB"))
+                    {
+                        isFunction = true;
+                        break;
+                    }
                     throw new Exception("invalid operator") ;
             }
         }
@@ -248,7 +253,7 @@ namespace shuntingYard
 
            
             Regex numberRegex = new Regex(@"\d+\.?\d*");
-            Regex operatorRegex = new Regex(@"[\+\^\-\/\*\)\(,]|(log)|(max)|(min)|(ln)|(cosh)|(cos)|(acos)|(sin)|(sinh)|(asin)|(tan)|(atan)|(tanh)|(~Base(\d+\.?\d*)+~)");
+            Regex operatorRegex = new Regex(@"[\+\^\-\/\*\)\(,]|(logB\[\d+\.?\d*\])|(log)|(max)|(min)|(ln)|(cosh)|(cos)|(acos)|(sin)|(sinh)|(asin)|(tan)|(atan)|(tanh)");
 
 
             MatchCollection numberMatches = numberRegex.Matches(expression);
@@ -495,7 +500,7 @@ namespace shuntingYard
             }
         }
 
-        public double HandleOneInputMath(float n1,string Operator,int log_base = 0)
+        public double HandleOneInputMath(float n1,string Operator)
         {
             //purpose: calculates the result of a one-input function
             //params: float and operator
@@ -507,34 +512,44 @@ namespace shuntingYard
                     return Math.Abs(n1);
                 case "sin":
 
-                    return Math.Sin(n1);
+                    return Math.Round(Math.Sin(Math.PI * n1/180),15);
                 case "asin":
-                    return Math.Asin(n1);
+                    return Math.Round(Math.Asin(Math.PI * n1 / 180),15);
                 case "sinh":
-                    return Math.Sinh(n1);
+                    return Math.Round(Math.Sinh(Math.PI * n1 / 180),15);
 
 
                 case "cos":
-                    return Math.Cos(n1);
+                    return Math.Round(Math.Cos(Math.PI * n1 / 180),15);
                 case "acos":
-                    return Math.Acos(n1);
+                    return Math.Round(Math.Acos(Math.PI * n1 / 180),15);
                 case "cosh":
-                    return Math.Cosh(n1);
+                    return Math.Round(Math.Cosh(Math.PI * n1 / 180),15);
 
                 case "tan":
-                    return Math.Tan(n1);
+                    return Math.Round(Math.Tan(Math.PI * n1 / 180),15);
                 case "atan":
                     return Math.Atan(n1);
                 case "tanh":
-                    return Math.Tanh(n1);
+                    
+                    return Math.Round(Math.Tanh(Math.PI * n1 / 180),15);
 
                 case "log":
-                    return Math.Log10(n1);
+                    return Math.Round(Math.Log10(n1),15);
                 case "ln":
-                    return Math.Log(n1);
+                    return Math.Round(Math.Log(n1),15);
                 default:
-                    return 0;
-                    break;
+                    if (Operator.Contains("log"))
+                    {
+                        Regex log_base = new Regex(@"\d+");
+                        MatchCollection number = log_base.Matches(Operator);
+                        int base_int;
+                        int.TryParse(number[0].ToString(),out base_int);
+                        return Math.Round(Math.Log(n1, base_int),15);
+
+                    }
+                    throw new Exception("failed");
+                    
             }
 
         }
@@ -546,6 +561,8 @@ namespace shuntingYard
              * at least one number;
              * @return: an int representing the result of the expression
              */
+
+            
 
             Stack<float> eval = new Stack<float>();
             foreach(string item in postfix)
